@@ -18,13 +18,25 @@ locals {
   github_thumbprints = [for x in data.tls_certificate.this.certificates : x.sha1_fingerprint if x.is_ca]
 }
 
+data "aws_iam_openid_connect_provider" "this" {
+  for_each = var.create_oidc_provider ? {} : { oidc_provider = false }
+
+  url = data.tls_certificate.this.url
+}
+
 resource "aws_iam_openid_connect_provider" "this" {
+  for_each = var.create_oidc_provider ? { oidc_provider = true } : {}
+
   url             = data.tls_certificate.this.url
   client_id_list  = [var.github_oidc_audience]
   thumbprint_list = local.github_thumbprints
-  tags = {
+  tags = merge(var.tags, {
     Name = "github.com"
-  }
+  })
+}
+
+locals {
+  aws_iam_openid_connect_provider = var.create_oidc_provider ? aws_iam_openid_connect_provider.this["oidc_provider"] : data.aws_iam_openid_connect_provider.this["oidc_provider"]
 }
 
 data "aws_iam_policy_document" "this_assume_role_policy" {
@@ -34,7 +46,7 @@ data "aws_iam_policy_document" "this_assume_role_policy" {
     effect = "Allow"
     principals {
       type        = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.this.arn]
+      identifiers = [local.aws_iam_openid_connect_provider.arn]
     }
     actions = [
       "sts:AssumeRoleWithWebIdentity",
@@ -57,7 +69,7 @@ resource "aws_iam_role" "this" {
   name                = each.key
   assume_role_policy  = data.aws_iam_policy_document.this_assume_role_policy[each.key].json
   managed_policy_arns = each.value.policy_arns
-  tags = {
+  tags = merge(var.tags, {
     Name = each.key
-  }
+  })
 }

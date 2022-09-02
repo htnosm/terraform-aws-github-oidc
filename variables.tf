@@ -1,3 +1,9 @@
+variable "create_oidc_provider" {
+  description = "Create a new identity provider."
+  type        = bool
+  default     = true
+}
+
 variable "github_oidc_domain" {
   description = "The domain of the identity provider. Corresponds to the iss claim."
   type        = string
@@ -26,4 +32,10 @@ variable "iam_roles" {
     policy_arns = list(string)
   }))
   default = {}
+}
+
+variable "tags" {
+  description = "A mapping of tags to assign to resources."
+  type        = map(string)
+  default     = {}
 }

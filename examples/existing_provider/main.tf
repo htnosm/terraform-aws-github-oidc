@@ -1,5 +1,7 @@
-module "github_oidc_provider" {
-  source = "../"
+module "github_oidc_iam_roles" {
+  source = "../../"
+
+  create_oidc_provider = false
   iam_roles = {
     "GitHubActions-terrafrom-plan" : {
       oidc_claims = ["repo:octo-org/octo-repo:ref:refs/heads/octo-branch"]
@@ -12,6 +14,6 @@ module "github_oidc_provider" {
   }
 }
 
-output "github_oidc_provider" {
-  value = module.github_oidc_provider.oidc_provider
+output "github_oidc_iam_roles" {
+  value = module.github_oidc_iam_roles.oidc_provider
 }
