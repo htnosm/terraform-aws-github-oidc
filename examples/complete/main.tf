@@ -18,3 +18,7 @@ module "github_oidc_provider" {
 output "github_oidc_provider" {
   value = module.github_oidc_provider.oidc_provider
 }
+
+output "github_oidc_iam_roles" {
+  value = module.github_oidc_provider.oidc_iam_roles
+}

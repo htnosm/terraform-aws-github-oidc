@@ -50,4 +50,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_oidc_iam_roles"></a> [oidc\_iam\_roles](#output\_oidc\_iam\_roles) | n/a |
 | <a name="output_oidc_provider"></a> [oidc\_provider](#output\_oidc\_provider) | n/a |
