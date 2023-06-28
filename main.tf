@@ -15,7 +15,7 @@ data "tls_certificate" "this" {
 }
 
 locals {
-  github_thumbprints = [for x in data.tls_certificate.this.certificates : x.sha1_fingerprint if x.is_ca]
+  github_thumbprints = [for x in data.tls_certificate.this.certificates : x.sha1_fingerprint]
 }
 
 data "aws_iam_openid_connect_provider" "this" {
