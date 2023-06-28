@@ -16,6 +16,15 @@ variable "github_oidc_audience" {
   default     = "sts.amazonaws.com"
 }
 
+variable "github_oidc_thumbprints" {
+  description = "A list of known thumbprints for the OpenID Connect (OIDC). ref.[GitHub Actions – Update on OIDC integration with AWS](https://github.blog/changelog/2023-06-27-github-actions-update-on-oidc-integration-with-aws/)"
+  type        = list(string)
+  default     = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1",
+    "1c58a3a8518e8759bf075b76b750d4f2df264fcd",
+  ]
+}
+
 variable "iam_roles" {
   description = <<-EOT
     {
